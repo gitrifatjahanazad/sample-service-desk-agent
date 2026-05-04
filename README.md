@@ -1,0 +1,78 @@
+# Bangla Voice Service-Desk Agent
+
+A minimal browser-based voice agent that speaks and listens in Bangla, built on the OpenAI Realtime API (`gpt-realtime-1.5`) over WebRTC. Ships with a default Robi (telco) customer-service persona that can be edited live in the UI.
+
+## How it works
+
+```
+Browser (mic + speakers)
+   |
+   |  WebRTC (audio + data channel)
+   v
+OpenAI Realtime API
+   - noise reduction (far_field)
+   - server VAD (turn detection)
+   - transcription (gpt-4o-mini-transcribe)
+   - reasoning + speech (gpt-realtime-1.5, voice: marin)
+```
+
+The Node server's only job is to mint short-lived ephemeral session keys via `POST /v1/realtime/client_secrets`. The master `OPENAI_API_KEY` never reaches the browser; audio flows directly from the browser to OpenAI.
+
+## Features
+
+- True speech-to-speech (no separate STT and TTS round-trips)
+- Bangla input and output, with live user and assistant transcripts in the UI
+- Server-side voice activity detection with barge-in (just talk; or toggle to push-to-talk)
+- Editable system prompt with an Apply button that re-configures the live session
+- Default persona: polite Robi customer-service agent (call rates, packages, MNP, recharge, FnF, USSD, billing, roaming) — refers unknowns to 121 / robi.com.bd
+- Single command to run; no build step, no framework
+
+## Quick start
+
+Requires Node.js 18+.
+
+```bash
+cp .env.example .env
+# put your OpenAI API key in .env
+npm install
+npm start
+```
+
+Open `http://localhost:3000` in Chrome or Edge, grant microphone permission, click **সংযোগ করুন**, and start speaking.
+
+## Configuration
+
+| Setting | Value | Where to change |
+|---|---|---|
+| Realtime model | `gpt-realtime-1.5` | [server.js](server.js), [public/app.js](public/app.js) (constant `MODEL`) |
+| Voice | `marin` | [public/app.js](public/app.js) — `audio.output.voice` |
+| Transcription model | `gpt-4o-mini-transcribe` | [public/app.js](public/app.js) — `audio.input.transcription.model` |
+| Noise reduction | `far_field` (laptop / built-in mics) | [public/app.js](public/app.js) — `audio.input.noise_reduction.type` |
+| Server VAD | threshold `0.5`, prefix padding `300 ms`, silence `500 ms` | [public/app.js](public/app.js) — `audio.input.turn_detection` |
+| System prompt | Robi-themed Bangla default, editable in UI | [public/app.js](public/app.js) — `DEFAULT_SYSTEM_PROMPT`, or edit at runtime |
+
+Other valid voices for Realtime: `cedar` (also realtime-exclusive), `alloy`, `echo`, `shimmer`. Other transcription models: `gpt-4o-transcribe`, `whisper-1`. Switch `noise_reduction` to `near_field` if you use a close-talking headset mic.
+
+## Files
+
+```
+.
+├── package.json            # express, dotenv
+├── server.js               # POST /api/session  (mints ephemeral keys)
+├── .env.example            # template; copy to .env and add your key
+├── .gitignore              # excludes .env and node_modules
+└── public/
+    ├── index.html          # UI (Bangla labels, prompt editor, log)
+    ├── style.css           # dark theme, chat bubbles, prompt panel
+    └── app.js              # WebRTC handshake, session.update, event handling
+```
+
+## Security note
+
+The `OPENAI_API_KEY` lives only in `.env` (gitignored) and is read by the Node server. The browser only ever sees an ephemeral client secret with a short TTL. If a key is ever exposed (paste in chat, screenshot, accidental commit), revoke it at https://platform.openai.com/api-keys and rotate.
+
+## Limitations
+
+- No persistence: refresh the page and the conversation history is gone (the realtime session is per-tab).
+- HTTP only: runs on `http://localhost`. For deployment beyond localhost you need HTTPS so the browser will allow `getUserMedia`.
+- No tool calling, no RAG, no knowledge base. The agent answers from the system prompt and the model's general knowledge; for unverified specifics it refers users to Robi's official channels.
