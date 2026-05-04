@@ -17,7 +17,11 @@ function buildSessionConfig(instructions) {
     audio: {
       input: {
         noise_reduction: { type: 'far_field' },
-        transcription: { model: 'gpt-4o-mini-transcribe' },
+        transcription: {
+          model: 'gpt-4o-mini-transcribe',
+          language: 'bn',
+          prompt: 'বাংলা ভাষায় কথোপকথন। Robi (রবি) মোবাইল অপারেটর সম্পর্কিত শব্দ যেমন রিচার্জ, ইন্টারনেট প্যাকেজ, MB, GB, MNP, FnF, USSD, কাস্টমার কেয়ার (১২১) থাকতে পারে।',
+        },
         turn_detection: {
           type: 'server_vad',
           threshold: 0.5,
