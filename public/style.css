@@ -196,3 +196,88 @@ button.secondary:hover:not(:disabled) {
   opacity: 0.75;
   font-style: italic;
 }
+
+.sip-box .sip-status {
+  margin: 6px 0 12px;
+  color: var(--muted);
+}
+
+.sip-box .sip-status.error { color: var(--danger); }
+
+.sip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  margin-top: 10px;
+}
+
+.sip-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.sip-grid label.sip-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+
+.sip-grid input[type=text],
+.sip-grid input[type=password],
+.sip-grid input[type=number],
+.sip-grid select {
+  background: #11141a;
+  color: var(--text);
+  border: 1px solid #2c313c;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 14px;
+}
+
+.sip-grid input:focus,
+.sip-grid select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.sip-log-box {
+  margin-top: 14px;
+  background: #11141a;
+  border: 1px solid #2c313c;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.sip-log-box strong {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.sip-log {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  max-height: 160px;
+  overflow-y: auto;
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.sip-log-item {
+  padding: 2px 0;
+  border-bottom: 1px solid #1a1d24;
+  white-space: pre-wrap;
+}
+
+.sip-log-item:last-child { border-bottom: none; }
+.sip-log-item.sip-error { color: var(--danger); }
+
+@media (max-width: 600px) {
+  .sip-grid { grid-template-columns: 1fr; }
+}

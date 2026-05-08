@@ -67,7 +67,15 @@ const remoteAudio = $('remote');
 const promptEl = $('systemPrompt');
 const applyPromptBtn = $('applyPromptBtn');
 const resetPromptBtn = $('resetPromptBtn');
+const savePromptSipBtn = $('savePromptSipBtn');
 const promptStatusEl = $('promptStatus');
+const sipForm = $('sipForm');
+const sipStatusEl = $('sipStatus');
+const sipFormStatus = $('sipFormStatus');
+const sipLogEl = $('sipLog');
+const sipSaveBtn = $('sipSaveBtn');
+const sipStartBtn = $('sipStartBtn');
+const sipStopBtn = $('sipStopBtn');
 
 promptEl.value = DEFAULT_SYSTEM_PROMPT;
 
@@ -353,5 +361,178 @@ resetPromptBtn.addEventListener('click', () => {
   promptStatusEl.textContent = 'ডিফল্ট প্রম্পট লোড হয়েছে।';
   setTimeout(() => { promptStatusEl.textContent = ''; }, 2500);
 });
+
+// ---------- SIP integration ----------
+
+function applyConfigToForm(cfg) {
+  for (const el of sipForm.elements) {
+    if (!el.name) continue;
+    if (el.type === 'checkbox') {
+      el.checked = Boolean(cfg[el.name]);
+    } else if (el.name === 'password') {
+      el.value = '';
+      el.placeholder = cfg.passwordSet ? '(saved — leave blank to keep)' : '';
+    } else {
+      el.value = cfg[el.name] ?? '';
+    }
+  }
+}
+
+function readForm() {
+  const data = {};
+  for (const el of sipForm.elements) {
+    if (!el.name) continue;
+    if (el.type === 'checkbox') data[el.name] = el.checked;
+    else if (el.type === 'number') data[el.name] = el.value === '' ? null : Number(el.value);
+    else data[el.name] = el.value;
+  }
+  return data;
+}
+
+async function loadSipConfig() {
+  try {
+    const res = await fetch('/api/sip/config');
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Failed');
+    applyConfigToForm(json.config);
+  } catch (err) {
+    sipFormStatus.textContent = `লোড ব্যর্থ: ${err.message}`;
+  }
+}
+
+async function postSip(url, body) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+  return json;
+}
+
+function appendSipLog(text, level = 'info') {
+  const li = document.createElement('li');
+  li.className = `sip-log-item sip-${level}`;
+  const time = new Date().toLocaleTimeString();
+  li.textContent = `[${time}] ${text}`;
+  sipLogEl.appendChild(li);
+  while (sipLogEl.children.length > 50) sipLogEl.firstChild.remove();
+  sipLogEl.scrollTop = sipLogEl.scrollHeight;
+}
+
+const sipBubbles = { user: null, bot: null };
+
+const SIP_STATUS_LABELS = {
+  stopped: 'বন্ধ',
+  starting: 'চালু হচ্ছে…',
+  registered: 'রেজিস্টার্ড',
+  in_call: 'কলে আছে',
+  error: 'ত্রুটি',
+};
+
+function handleSipStatus(ev) {
+  const label = SIP_STATUS_LABELS[ev.state] || ev.state;
+  sipStatusEl.textContent = `স্ট্যাটাস: ${label} — ${ev.message}`;
+  sipStatusEl.classList.toggle('error', ev.state === 'error');
+}
+
+function handleSipCall(ev) {
+  if (ev.state === 'ringing') {
+    appendSipLog(`📞 রিং: ${ev.from}`, 'info');
+  } else if (ev.state === 'connected') {
+    appendSipLog(`✅ সংযুক্ত: ${ev.from}`, 'info');
+    sipBubbles.user = null;
+    sipBubbles.bot = null;
+  } else if (ev.state === 'ended') {
+    appendSipLog(`📴 শেষ (${ev.reason}, ${ev.duration ?? 0}s)`, 'info');
+    sipBubbles.user = null;
+    sipBubbles.bot = null;
+  }
+}
+
+function handleSipTranscript(ev) {
+  const slot = ev.role;
+  if (!sipBubbles[slot]) {
+    sipBubbles[slot] = addBubble(slot === 'user' ? 'user' : 'bot', '');
+  }
+  if (ev.partial) {
+    sipBubbles[slot].textContent += ev.text;
+  } else {
+    sipBubbles[slot].textContent = ev.text;
+    sipBubbles[slot] = null;
+  }
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function handleSipEvent(ev) {
+  if (ev.kind === 'status') handleSipStatus(ev);
+  else if (ev.kind === 'log') appendSipLog(ev.message, ev.level);
+  else if (ev.kind === 'call') handleSipCall(ev);
+  else if (ev.kind === 'transcript') handleSipTranscript(ev);
+}
+
+function startSseStream() {
+  const es = new EventSource('/api/sip/events');
+  es.onmessage = (e) => {
+    try { handleSipEvent(JSON.parse(e.data)); } catch { /* ignore */ }
+  };
+  es.onerror = () => {
+    // Browser will reconnect automatically.
+  };
+}
+
+sipSaveBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  sipFormStatus.textContent = 'সেভ হচ্ছে…';
+  try {
+    const data = readForm();
+    const json = await postSip('/api/sip/config', data);
+    applyConfigToForm(json.config);
+    sipFormStatus.textContent = 'সেভ হয়েছে।';
+  } catch (err) {
+    sipFormStatus.textContent = `সেভ ব্যর্থ: ${err.message}`;
+  }
+  setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
+});
+
+sipStartBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  sipFormStatus.textContent = 'চালু করা হচ্ছে…';
+  try {
+    const data = readForm();
+    await postSip('/api/sip/config', { ...data, enabled: true });
+    sipFormStatus.textContent = 'চালু করা হয়েছে।';
+  } catch (err) {
+    sipFormStatus.textContent = `চালু ব্যর্থ: ${err.message}`;
+  }
+  setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
+});
+
+sipStopBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  sipFormStatus.textContent = 'বন্ধ করা হচ্ছে…';
+  try {
+    await postSip('/api/sip/stop');
+    sipFormStatus.textContent = 'বন্ধ হয়েছে।';
+  } catch (err) {
+    sipFormStatus.textContent = `বন্ধ ব্যর্থ: ${err.message}`;
+  }
+  setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
+});
+
+savePromptSipBtn.addEventListener('click', async () => {
+  promptStatusEl.textContent = 'SIP-এ সেভ হচ্ছে…';
+  try {
+    await postSip('/api/sip/config', { instructions: getSystemPrompt() });
+    promptStatusEl.textContent = 'SIP প্রম্পট সেভ হয়েছে।';
+  } catch (err) {
+    promptStatusEl.textContent = `সেভ ব্যর্থ: ${err.message}`;
+  }
+  setTimeout(() => { promptStatusEl.textContent = ''; }, 3000);
+});
+
+loadSipConfig();
+startSseStream();
 
 window.addEventListener('beforeunload', cleanup);

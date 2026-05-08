@@ -28,7 +28,63 @@
         <div class="prompt-actions">
           <button id="applyPromptBtn" class="secondary">প্রয়োগ করুন</button>
           <button id="resetPromptBtn" class="secondary">ডিফল্ট</button>
+          <button id="savePromptSipBtn" class="secondary">SIP-এ সেভ করুন</button>
           <span id="promptStatus" class="prompt-status"></span>
+        </div>
+      </details>
+
+      <details class="prompt-box sip-box">
+        <summary>📞 কল কনফিগ (SIP Account)</summary>
+        <p id="sipStatus" class="sip-status">লোড হচ্ছে…</p>
+        <form id="sipForm" class="sip-grid" autocomplete="off">
+          <label>Account Name<input name="accountName" type="text" /></label>
+          <label>SIP Server<input name="sipServer" type="text" placeholder="pabx.example.com:5060" /></label>
+          <label>SIP Proxy<input name="sipProxy" type="text" /></label>
+          <label>Username *<input name="username" type="text" required /></label>
+          <label>Domain *<input name="domain" type="text" required /></label>
+          <label>Login<input name="login" type="text" /></label>
+          <label>Password *<input name="password" type="password" placeholder="(saved)" autocomplete="new-password" /></label>
+          <label>Display Name<input name="displayName" type="text" /></label>
+          <label>Voicemail Number<input name="voicemailNumber" type="text" /></label>
+          <label>Dialing Prefix<input name="dialingPrefix" type="text" /></label>
+          <label>Dial Plan<input name="dialPlan" type="text" /></label>
+          <label>Hide Caller ID
+            <select name="hideCallerId">
+              <option value="Disabled">Disabled</option>
+              <option value="Enabled">Enabled</option>
+            </select>
+          </label>
+          <label>Media Encryption
+            <select name="mediaEncryption">
+              <option value="Disabled">Disabled</option>
+              <option value="SRTP Optional">SRTP Optional</option>
+              <option value="SRTP Mandatory">SRTP Mandatory</option>
+            </select>
+          </label>
+          <label>Transport
+            <select name="transport">
+              <option value="UDP">UDP</option>
+              <option value="TCP" disabled>TCP (not supported)</option>
+              <option value="TLS" disabled>TLS (not supported)</option>
+            </select>
+          </label>
+          <label>Public Address<input name="publicAddress" type="text" value="Auto" /></label>
+          <label>Register Refresh<input name="registerRefresh" type="number" min="60" value="300" /></label>
+          <label>Keep-Alive<input name="keepAlive" type="number" min="0" value="15" /></label>
+          <label class="sip-check"><input type="checkbox" name="publishPresence" /> Publish Presence</label>
+          <label class="sip-check"><input type="checkbox" name="allowIpRewrite" /> Allow IP Rewrite</label>
+          <label class="sip-check"><input type="checkbox" name="ice" /> ICE</label>
+          <label class="sip-check"><input type="checkbox" name="disableSessionTimers" /> Disable Session Timers</label>
+        </form>
+        <div class="prompt-actions">
+          <button id="sipSaveBtn" class="primary">Save</button>
+          <button id="sipStartBtn" class="secondary">Start</button>
+          <button id="sipStopBtn" class="secondary">Stop</button>
+          <span id="sipFormStatus" class="prompt-status"></span>
+        </div>
+        <div class="sip-log-box">
+          <strong>কল লগ</strong>
+          <ul id="sipLog" class="sip-log"></ul>
         </div>
       </details>
 

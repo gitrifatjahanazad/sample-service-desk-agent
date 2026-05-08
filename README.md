@@ -57,15 +57,34 @@ Other valid voices for Realtime: `cedar` (also realtime-exclusive), `alloy`, `ec
 
 ```
 .
-├── package.json            # express, dotenv
-├── server.js               # POST /api/session  (mints ephemeral keys)
+├── package.json            # express, dotenv, sip, ws
+├── server.js               # /api/session + /api/sip/* endpoints, SSE
 ├── .env.example            # template; copy to .env and add your key
-├── .gitignore              # excludes .env and node_modules
+├── .gitignore              # excludes .env, node_modules, sip-config.json
+├── lib/
+│   ├── sip-config.js       # load/save sip-config.json
+│   ├── sip-events.js       # EventEmitter shared with the SSE stream
+│   ├── rtp-session.js      # RTP/UDP socket, 20ms μ-law packetizer
+│   ├── openai-bridge.js    # ws to OpenAI Realtime (audio/pcmu both ways)
+│   └── sip-ua.js           # SIP UAS: REGISTER w/ digest, INVITE → 200 OK, BYE
 └── public/
-    ├── index.html          # UI (Bangla labels, prompt editor, log)
-    ├── style.css           # dark theme, chat bubbles, prompt panel
-    └── app.js              # WebRTC handshake, session.update, event handling
+    ├── index.html          # UI (Bangla labels, prompt editor, SIP panel, log)
+    ├── style.css           # dark theme, chat bubbles, prompt + SIP panels
+    └── app.js              # WebRTC handshake, session.update, SIP form, SSE
 ```
+
+## SIP / call integration
+
+The server can also act as a SIP softphone (like MicroSIP) so that incoming PSTN/PBX calls are auto-answered and bridged to the same Bangla bot. The bridge is server-side and runs in parallel with the browser flow.
+
+- Open `http://localhost:3000`, expand **📞 কল কনফিগ (SIP Account)**, fill in the same fields you'd put in MicroSIP (SIP Server, Username, Domain, Login, Password, Transport=UDP, Register Refresh, Keep-Alive), click **Save**, then **Start**.
+- Credentials are persisted to `sip-config.json` (gitignored). The password is never returned to the browser once saved — the form shows `(saved — leave blank to keep)`.
+- The status line and call log update live via Server-Sent Events at `/api/sip/events`.
+- Audio path: caller → PBX → SIP/RTP (G.711 μ-law, 8 kHz, 20 ms) → Node bridge → OpenAI Realtime WebSocket (`audio/pcmu` both ways, no resampling) → bot reply RTP → caller.
+- Concurrency: one call at a time; a second concurrent INVITE is rejected with `486 Busy Here`.
+- Local SIP listen port defaults to UDP `5070` (override with `SIP_LOCAL_PORT` in `.env`). Don't run MicroSIP on the same extension at the same time — the PBX will only honor one registration.
+- The bot's persona for SIP calls is read from `sip-config.json#instructions`. Use the **SIP-এ সেভ করুন** button in the System prompt panel to push the current textarea contents to that file.
+- Limitations: UDP transport only (no TLS/WSS), no SRTP, no outbound calling, no DNS SRV, single concurrent call. NAT/IP rewrite relies on the PBX honoring `rport`/`received`.
 
 ## Security note
 

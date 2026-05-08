@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "sip": "^0.0.6",
+    "ws": "^8.18.0"
   },
   "engines": {
     "node": ">=18"
