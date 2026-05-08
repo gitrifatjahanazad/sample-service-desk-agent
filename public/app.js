@@ -118,6 +118,7 @@ const sipLogEl = $('sipLog');
 const sipSaveBtn = $('sipSaveBtn');
 const sipStartBtn = $('sipStartBtn');
 const sipStopBtn = $('sipStopBtn');
+const sipTestBtn = $('sipTestBtn');
 
 promptEl.value = DEFAULT_SYSTEM_PROMPT;
 
@@ -561,6 +562,22 @@ sipStopBtn.addEventListener('click', async (e) => {
     sipFormStatus.textContent = `বন্ধ ব্যর্থ: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
+});
+
+sipTestBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  sipFormStatus.textContent = 'Test PBX…';
+  try {
+    const result = await postSip('/api/sip/test');
+    if (result.ok) {
+      sipFormStatus.textContent = `Test PBX: ${result.status} in ${result.ms}ms`;
+    } else {
+      sipFormStatus.textContent = `Test PBX failed: ${result.error || result.status} (${result.ms}ms)`;
+    }
+  } catch (err) {
+    sipFormStatus.textContent = `Test PBX failed: ${err.message}`;
+  }
+  setTimeout(() => { sipFormStatus.textContent = ''; }, 6000);
 });
 
 savePromptSipBtn.addEventListener('click', async () => {

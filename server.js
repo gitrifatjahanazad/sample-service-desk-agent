@@ -3,7 +3,7 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig, saveConfig, redactConfig, mergeIncoming } from './lib/sip-config.js';
-import { startSip, stopSip, getStatus as getSipStatus } from './lib/sip-ua.js';
+import { startSip, stopSip, getStatus as getSipStatus, pingPbx } from './lib/sip-ua.js';
 import { bus } from './lib/sip-events.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -91,6 +91,15 @@ app.post('/api/sip/start', async (_req, res) => {
     const saved = await saveConfig({ ...cfg, enabled: true });
     await startSip(saved);
     res.json({ config: redactConfig(saved), status: getSipStatus() });
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+app.post('/api/sip/test', async (_req, res) => {
+  try {
+    const result = await pingPbx();
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
