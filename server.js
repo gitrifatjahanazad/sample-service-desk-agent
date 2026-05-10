@@ -153,7 +153,7 @@ app.get('/api/sip/events', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
-  console.log(`bangla service desk listening on http://localhost:${PORT}`);
+  console.log(`thai erp help desk listening on http://localhost:${PORT}`);
   try {
     const cfg = await loadConfig();
     if (cfg.enabled && cfg.sipServer && cfg.username && cfg.password) {

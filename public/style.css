@@ -17,7 +17,7 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Noto Sans Bengali", "SolaimanLipi", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Noto Sans Thai", "Sarabun", "IBM Plex Sans Thai", "Leelawadee UI", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 16px;
   line-height: 1.5;
   min-height: 100vh;

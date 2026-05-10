@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Bangla voice service-desk agent using OpenAI Realtime API (gpt-realtime-1.5) over WebRTC.",
+  "description": "Thai-language ERP help-desk voice agent using OpenAI Realtime API (gpt-realtime-1.5) over WebRTC.",
   "scripts": {
     "start": "node server.js"
   },

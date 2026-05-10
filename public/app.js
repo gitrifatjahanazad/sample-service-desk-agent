@@ -1,73 +1,59 @@
 const MODEL = 'gpt-realtime-1.5';
 
 const DEFAULT_SYSTEM_PROMPT = `
-আপনি Robi (রবি) মোবাইল অপারেটরের একজন ভদ্র, সাহায্যকারী এবং পেশাদার বাংলাভাষী কাস্টমার সার্ভিস এজেন্ট। আপনি শুধুমাত্র প্রাকৃতিক বাংলাদেশি বাংলা (বাংলাদেশি অ্যাকসেন্ট ও শব্দচয়ন) ব্যবহার করে কথা বলবেন।
+คุณคือเจ้าหน้าที่ Help Desk ของระบบ ERP (Enterprise Resource Planning) ที่สุภาพ ใจเย็น และเป็นมืออาชีพ พูดภาษาไทยมาตรฐานเท่านั้น ให้บริการผู้ใช้งานทั้งภายในและภายนอกองค์กรผ่านทางโทรศัพท์
 
-ভূমিকা:
+บทบาท:
 
-* গ্রাহকদের রবি সংক্রান্ত সেবা যেমন কল রেট, ইন্টারনেট ও মিনিট প্যাকেজ, রিচার্জ, বান্ডেল অফার, MNP, রোমিং, বিল পেমেন্ট, FnF, USSD কোড, কাস্টমার কেয়ার ইত্যাদি বিষয়ে সাহায্য করুন।
-* আপনি শুধু রবি সংক্রান্ত বিষয়ে সাহায্য করেন। অন্য বিষয়ে প্রশ্ন এলে ভদ্রভাবে গ্রাহককে রবি সম্পর্কিত প্রশ্নে ফিরিয়ে আনুন।
+* ช่วยผู้ใช้งานเกี่ยวกับโมดูลต่าง ๆ ของระบบ ERP เช่น ฝ่ายขาย (Sales Order, ใบเสนอราคา, ใบกำกับภาษี), จัดซื้อ (Purchase Order, ผู้ขาย/Vendor), คลังสินค้า (Inventory, สต็อก, การโอนย้าย), บัญชี (GL, AP, AR, การกระทบยอด), การเงิน, ทรัพยากรบุคคล (HR, เงินเดือน, การเข้างาน), การผลิต (BOM, Work Order) และรายงาน
+* ช่วยแก้ปัญหาทั่วไป เช่น เข้าระบบไม่ได้, ลืมรหัสผ่าน, สิทธิ์การเข้าถึงไม่ครบ, รายงานไม่ออก, ตัวเลขในงบไม่ตรง, การปิดงวด, การตั้งค่าผู้ใช้
+* คุณช่วยเฉพาะเรื่องที่เกี่ยวกับระบบ ERP เท่านั้น หากผู้ใช้ถามเรื่องอื่น ให้ดึงกลับมาที่เรื่อง ERP อย่างสุภาพ
 
-ভাষা ও অ্যাকসেন্ট:
+ภาษาและสำเนียง:
 
-* সর্বদা শুধুমাত্র বাংলায় উত্তর দিন।
-* প্রাকৃতিক ঢাকাইয়া/আধুনিক বাংলাদেশি কথ্য বাংলা ব্যবহার করুন।
-* কলকাতা বা পশ্চিমবঙ্গের বাংলা শব্দচয়ন, টোন বা উচ্চারণ ব্যবহার করবেন না।
-* “নমস্কার”, “কেমন আছো”, “বেশ”, “দেখাচ্ছি” ধরনের কলকাতাকেন্দ্রিক প্রকাশ এড়িয়ে চলুন।
-* প্রয়োজনে ব্যবহার করুন:
+* ตอบเป็นภาษาไทยมาตรฐานเสมอ ใช้คำสุภาพ ลงท้ายด้วย ครับ/ค่ะ อย่างเหมาะสม (ใช้ "ค่ะ" เป็นค่าเริ่มต้น)
+* ใช้ภาษาพูดที่เป็นธรรมชาติ ฟังง่าย ไม่เป็นทางการเกินไปและไม่หยาบ
+* คำเรียกผู้ใช้: "คุณลูกค้า" หรือ "พี่" ตามความเหมาะสม
+* คำที่ใช้ได้บ่อย: "สวัสดีค่ะ", "ยินดีให้บริการค่ะ", "รบกวนสอบถามนิดนึงนะคะ", "เข้าใจแล้วค่ะ", "ได้เลยค่ะ", "ขอตรวจสอบให้นะคะ"
+* ห้ามใช้ภาษาทางการมากเกินไป หรือศัพท์เทคนิคที่ผู้ใช้ทั่วไปไม่เข้าใจ
 
-  * “আসসালামু আলাইকুম”
-  * “কেমন আছেন”
-  * “ঠিক আছে”
-  * “সমস্যা নাই”
-  * “এইটা/ওইটা”
-* ভাষা হবে সহজ, পরিষ্কার, বন্ধুসুলভ এবং বাস্তব বাংলাদেশি কাস্টমার কেয়ারের মতো।
-* অতিরিক্ত সাহিত্যিক বা নাটকীয় বাংলা ব্যবহার করবেন না।
+รูปแบบการตอบ:
 
-উত্তরের ধরন:
+* ตอบสั้น กระชับ และเข้าใจง่าย เน้นการแก้ปัญหาให้ผู้ใช้ได้จริง
+* ถามคำถามสั้น ๆ เพื่อทำความเข้าใจปัญหาก่อน เช่น ใช้โมดูลอะไร, เห็นข้อความ error อะไร, เลขเอกสารอะไร
+* หากไม่แน่ใจ อย่าเดา ให้บอกตรง ๆ ว่าจะตรวจสอบเพิ่มเติม หรือแนะนำให้ติดต่อทีมเทคนิคหรือผู้ดูแลระบบ
+* หากเป็นเรื่องที่ต้องแก้ไขในระบบจริง (เช่น สิทธิ์, master data, การปิดงวด) ให้แจ้งว่าจะส่งเรื่องต่อให้ทีมที่เกี่ยวข้อง
 
-* সংক্ষিপ্ত, পরিষ্কার এবং সহজভাবে উত্তর দিন।
-* প্রয়োজনে গ্রাহকের সমস্যা বুঝতে প্রশ্ন করুন।
-* নিশ্চিত না হলে অনুমান করবেন না।
-* প্রয়োজন হলে গ্রাহককে রবি কাস্টমার কেয়ার ১২১ নম্বরে কল করতে অথবা [রবি অফিসিয়াল ওয়েবসাইট](https://www.robi.com.bd?utm_source=chatgpt.com) ভিজিট করতে বলুন।
+บุคลิกและน้ำเสียง:
 
-ব্যক্তিত্ব ও স্বর:
+* สุภาพ ใจเย็น อบอุ่น และมั่นใจเหมือนเจ้าหน้าที่คอลเซ็นเตอร์มืออาชีพ
+* หากผู้ใช้หงุดหงิดหรือเดือดร้อน ให้ใช้น้ำเสียงเห็นอกเห็นใจและขอโทษอย่างเหมาะสม
+* เมื่อให้คำแนะนำที่ช่วยผู้ใช้ได้ ให้น้ำเสียงเชิงบวกและให้กำลังใจ
 
-* ভদ্র, ধৈর্যশীল, উষ্ণ এবং আত্মবিশ্বাসী কাস্টমার সার্ভিস এজেন্টের মতো কথা বলুন।
-* গ্রাহক বিরক্ত বা হতাশ হলে সহানুভূতিশীল স্বর ব্যবহার করুন।
-* ভালো অফার বা সুবিধার তথ্য দিলে স্বরে ইতিবাচক উৎসাহ রাখুন।
+จังหวะและการหยุด:
 
-গতি ও বিরতি:
+* พูดด้วยความเร็วปานกลาง ไม่เร็วเกินไป
+* ข้อมูลสำคัญ เช่น เลขเอกสาร, รหัสผู้ใช้, จำนวนเงิน, วันที่, ขั้นตอนการกดเมนู ให้พูดช้า ๆ ชัด ๆ
+* เว้นจังหวะระหว่างขั้นตอนเพื่อให้ผู้ใช้ตามทัน
 
-* মাঝারি গতিতে কথা বলুন।
-* গুরুত্বপূর্ণ তথ্য—টাকার পরিমাণ, প্যাকেজের দাম, USSD কোড, ফোন নম্বর, মেয়াদ—ধীরে ও স্পষ্ট করে বলুন।
-* প্রতিটি গুরুত্বপূর্ণ ধাপ বা বাক্যের মাঝে সামান্য বিরতি রাখুন যেন গ্রাহক সহজে বুঝতে পারেন।
+การออกเสียง:
 
-উচ্চারণ:
+* ใช้การออกเสียงไทยมาตรฐาน
+* ศัพท์อังกฤษทางเทคนิคให้ออกเสียงตามที่คนไทยใช้กันทั่วไป เช่น
+  * "ERP" → "อี-อาร์-พี"
+  * "PO" → "พี-โอ", "SO" → "เอส-โอ", "GL" → "จี-แอล", "AR" → "เอ-อาร์", "AP" → "เอ-พี"
+  * "Invoice" → "อินวอยซ์"
+  * "Login" → "ล็อกอิน", "Password" → "พาสเวิร์ด"
+  * "Stock" → "สต็อก", "Report" → "รีพอร์ต"
 
-* শুদ্ধ প্রমিত বাংলাদেশি বাংলা উচ্চারণ ব্যবহার করুন।
-* English brand name ও technical term বাংলা টোনে উচ্চারণ করুন:
+การเน้นเสียง:
 
-  * “Robi” → “রবি”
-  * “Internet” → “ইন্টারনেট”
-  * “Package” → “প্যাকেজ”
-  * “Recharge” → “রিচার্জ”
-* সংক্ষিপ্ত রূপ স্পষ্টভাবে একটি একটি অক্ষর করে বলুন:
+* เน้นเสียงให้ชัดเจนเป็นพิเศษเมื่อพูดถึงเลขเอกสาร, รหัสผู้ใช้, จำนวนเงิน, วันที่, และชื่อเมนูในระบบ
 
-  * “FnF” → “এফ অ্যান্ড এফ”
-  * “MNP” → “এম এন পি”
-  * “USSD” → “ইউ এস এস ডি”
-  * “MB” → “এম বি”
-  * “GB” → “জি বি”
+แนวทางเพิ่มเติม:
 
-জোর (Emphasis):
-
-* টাকার পরিমাণ, প্যাকেজের নাম, USSD কোড, ফোন নম্বর এবং মেয়াদ—এই অংশগুলোতে কণ্ঠে অতিরিক্ত স্পষ্টতা ও জোর দিন।
-
-অতিরিক্ত নির্দেশনা:
-
-* Slight English mixing স্বাভাবিকভাবে ব্যবহার করা যেতে পারে, তবে মূল ভাষা অবশ্যই বাংলা হবে।
-* সবসময় এমনভাবে কথা বলুন যেন একজন বাস্তব বাংলাদেশি রবি কাস্টমার কেয়ার প্রতিনিধি গ্রাহকের সাথে ফোনে কথা বলছে।
+* ใช้คำศัพท์อังกฤษบางคำได้เป็นปกติเมื่อจำเป็น แต่ภาษาหลักต้องเป็นภาษาไทย
+* พูดเสมือนเป็นเจ้าหน้าที่ Help Desk ของระบบ ERP จริงที่กำลังคุยกับผู้ใช้งานทางโทรศัพท์
 `;
 
 function buildSessionConfig(instructions) {
@@ -81,8 +67,8 @@ function buildSessionConfig(instructions) {
         noise_reduction: { type: 'far_field' },
         transcription: {
           model: 'gpt-4o-mini-transcribe',
-          language: 'bn',
-          prompt: 'বাংলা ভাষায় কথোপকথন। Robi (রবি) মোবাইল অপারেটর সম্পর্কিত শব্দ যেমন রিচার্জ, ইন্টারনেট প্যাকেজ, MB, GB, MNP, FnF, USSD, কাস্টমার কেয়ার (১২১) থাকতে পারে।',
+          language: 'th',
+          prompt: 'บทสนทนาภาษาไทยเกี่ยวกับระบบ ERP อาจมีคำเช่น Sales Order, Purchase Order, Invoice, Inventory, สต็อก, GL, AP, AR, BOM, Work Order, รายงาน, ปิดงวด, ล็อกอิน, รหัสผ่าน, สิทธิ์ผู้ใช้',
         },
         turn_detection: {
           type: 'server_vad',
@@ -190,14 +176,14 @@ async function fetchEphemeralKey() {
 }
 
 async function connect() {
-  setStatus('সংযোগ হচ্ছে…');
+  setStatus('กำลังเชื่อมต่อ…');
   connectBtn.disabled = true;
 
   let ephemeralKey;
   try {
     ephemeralKey = await fetchEphemeralKey();
   } catch (err) {
-    setStatus(`টোকেন আনতে ব্যর্থ: ${err.message}`, true);
+    setStatus(`ขอ token ไม่สำเร็จ: ${err.message}`, true);
     connectBtn.disabled = false;
     return;
   }
@@ -210,14 +196,14 @@ async function connect() {
 
   pc.onconnectionstatechange = () => {
     if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
-      setStatus(`সংযোগ ${pc.connectionState}`, true);
+      setStatus(`การเชื่อมต่อ ${pc.connectionState}`, true);
     }
   };
 
   try {
     micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch (err) {
-    setStatus('মাইক্রোফোন অ্যাক্সেস দেওয়া হয়নি।', true);
+    setStatus('ไม่ได้รับสิทธิ์เข้าถึงไมโครโฟน', true);
     cleanup();
     return;
   }
@@ -229,7 +215,7 @@ async function connect() {
   dc = pc.createDataChannel('oai-events');
   dc.onopen = () => {
     sendEvent(buildSessionUpdate(vadToggle.checked));
-    setStatus(vadToggle.checked ? 'শুনছি…' : 'কথা বলার জন্য বাটন চেপে ধরুন');
+    setStatus(vadToggle.checked ? 'กำลังฟัง…' : 'กดค้างเพื่อพูด');
   };
   dc.onmessage = (e) => {
     try {
@@ -262,7 +248,7 @@ async function connect() {
   await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 
   connected = true;
-  connectBtn.textContent = 'সংযোগ বন্ধ করুন';
+  connectBtn.textContent = 'ตัดการเชื่อมต่อ';
   connectBtn.disabled = false;
   talkBtn.disabled = vadToggle.checked;
   setMicEnabled(vadToggle.checked);
@@ -288,7 +274,7 @@ function cleanup() {
     micStream = null;
   }
   remoteAudio.srcObject = null;
-  connectBtn.textContent = 'সংযোগ করুন';
+  connectBtn.textContent = 'เชื่อมต่อ';
   connectBtn.disabled = false;
   talkBtn.disabled = true;
   talkBtn.classList.remove('active');
@@ -296,18 +282,18 @@ function cleanup() {
 
 function disconnect() {
   cleanup();
-  setStatus('সংযোগ বন্ধ।');
+  setStatus('ตัดการเชื่อมต่อแล้ว');
 }
 
 function handleEvent(ev) {
   switch (ev.type) {
     case 'input_audio_buffer.speech_started':
       pendingUserBubble = addBubble('user', '…', true);
-      setStatus('শুনছি…');
+      setStatus('กำลังฟัง…');
       break;
 
     case 'input_audio_buffer.speech_stopped':
-      setStatus('উত্তর দিচ্ছি…');
+      setStatus('กำลังตอบ…');
       break;
 
     case 'conversation.item.input_audio_transcription.delta': {
@@ -344,11 +330,11 @@ function handleEvent(ev) {
     }
 
     case 'response.done':
-      setStatus(vadToggle.checked ? 'শুনছি…' : 'কথা বলার জন্য বাটন চেপে ধরুন');
+      setStatus(vadToggle.checked ? 'กำลังฟัง…' : 'กดค้างเพื่อพูด');
       break;
 
     case 'error':
-      setStatus(`ত্রুটি: ${ev.error?.message || JSON.stringify(ev.error)}`, true);
+      setStatus(`ข้อผิดพลาด: ${ev.error?.message || JSON.stringify(ev.error)}`, true);
       break;
   }
 }
@@ -363,14 +349,14 @@ vadToggle.addEventListener('change', () => {
   sendEvent(buildSessionUpdate(vadToggle.checked));
   talkBtn.disabled = vadToggle.checked;
   setMicEnabled(vadToggle.checked);
-  setStatus(vadToggle.checked ? 'শুনছি…' : 'কথা বলার জন্য বাটন চেপে ধরুন');
+  setStatus(vadToggle.checked ? 'กำลังฟัง…' : 'กดค้างเพื่อพูด');
 });
 
 function startTalk() {
   if (!connected || vadToggle.checked) return;
   talkBtn.classList.add('active');
   setMicEnabled(true);
-  setStatus('শুনছি…');
+  setStatus('กำลังฟัง…');
 }
 
 function stopTalk() {
@@ -380,7 +366,7 @@ function stopTalk() {
   setMicEnabled(false);
   sendEvent({ type: 'input_audio_buffer.commit' });
   sendEvent({ type: 'response.create' });
-  setStatus('উত্তর দিচ্ছি…');
+  setStatus('กำลังตอบ…');
 }
 
 talkBtn.addEventListener('mousedown', startTalk);
@@ -392,16 +378,16 @@ talkBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopTalk(); })
 applyPromptBtn.addEventListener('click', () => {
   if (connected) {
     sendEvent(buildSessionUpdate(vadToggle.checked));
-    promptStatusEl.textContent = 'প্রম্পট প্রয়োগ করা হয়েছে।';
+    promptStatusEl.textContent = 'นำ prompt ไปใช้แล้ว';
   } else {
-    promptStatusEl.textContent = 'সংযোগ করার সময় এই প্রম্পট ব্যবহার হবে।';
+    promptStatusEl.textContent = 'จะใช้ prompt นี้เมื่อเชื่อมต่อ';
   }
   setTimeout(() => { promptStatusEl.textContent = ''; }, 2500);
 });
 
 resetPromptBtn.addEventListener('click', () => {
   promptEl.value = DEFAULT_SYSTEM_PROMPT;
-  promptStatusEl.textContent = 'ডিফল্ট প্রম্পট লোড হয়েছে।';
+  promptStatusEl.textContent = 'โหลด prompt ค่าเริ่มต้นแล้ว';
   setTimeout(() => { promptStatusEl.textContent = ''; }, 2500);
 });
 
@@ -439,7 +425,7 @@ async function loadSipConfig() {
     if (!res.ok) throw new Error(json.error || 'Failed');
     applyConfigToForm(json.config);
   } catch (err) {
-    sipFormStatus.textContent = `লোড ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `โหลดไม่สำเร็จ: ${err.message}`;
   }
 }
 
@@ -467,28 +453,28 @@ function appendSipLog(text, level = 'info') {
 const sipBubbles = { user: null, bot: null };
 
 const SIP_STATUS_LABELS = {
-  stopped: 'বন্ধ',
-  starting: 'চালু হচ্ছে…',
-  registered: 'রেজিস্টার্ড',
-  in_call: 'কলে আছে',
-  error: 'ত্রুটি',
+  stopped: 'หยุดทำงาน',
+  starting: 'กำลังเริ่ม…',
+  registered: 'ลงทะเบียนแล้ว',
+  in_call: 'อยู่ในสาย',
+  error: 'ข้อผิดพลาด',
 };
 
 function handleSipStatus(ev) {
   const label = SIP_STATUS_LABELS[ev.state] || ev.state;
-  sipStatusEl.textContent = `স্ট্যাটাস: ${label} — ${ev.message}`;
+  sipStatusEl.textContent = `สถานะ: ${label} — ${ev.message}`;
   sipStatusEl.classList.toggle('error', ev.state === 'error');
 }
 
 function handleSipCall(ev) {
   if (ev.state === 'ringing') {
-    appendSipLog(`📞 রিং: ${ev.from}`, 'info');
+    appendSipLog(`📞 สายเข้า: ${ev.from}`, 'info');
   } else if (ev.state === 'connected') {
-    appendSipLog(`✅ সংযুক্ত: ${ev.from}`, 'info');
+    appendSipLog(`✅ เชื่อมต่อแล้ว: ${ev.from}`, 'info');
     sipBubbles.user = null;
     sipBubbles.bot = null;
   } else if (ev.state === 'ended') {
-    appendSipLog(`📴 শেষ (${ev.reason}, ${ev.duration ?? 0}s)`, 'info');
+    appendSipLog(`📴 จบสาย (${ev.reason}, ${ev.duration ?? 0}s)`, 'info');
     sipBubbles.user = null;
     sipBubbles.bot = null;
   }
@@ -527,39 +513,39 @@ function startSseStream() {
 
 sipSaveBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  sipFormStatus.textContent = 'সেভ হচ্ছে…';
+  sipFormStatus.textContent = 'กำลังบันทึก…';
   try {
     const data = readForm();
     const json = await postSip('/api/sip/config', data);
     applyConfigToForm(json.config);
-    sipFormStatus.textContent = 'সেভ হয়েছে।';
+    sipFormStatus.textContent = 'บันทึกแล้ว';
   } catch (err) {
-    sipFormStatus.textContent = `সেভ ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `บันทึกไม่สำเร็จ: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
 });
 
 sipStartBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  sipFormStatus.textContent = 'চালু করা হচ্ছে…';
+  sipFormStatus.textContent = 'กำลังเริ่ม…';
   try {
     const data = readForm();
     await postSip('/api/sip/config', { ...data, enabled: true });
-    sipFormStatus.textContent = 'চালু করা হয়েছে।';
+    sipFormStatus.textContent = 'เริ่มทำงานแล้ว';
   } catch (err) {
-    sipFormStatus.textContent = `চালু ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `เริ่มไม่สำเร็จ: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
 });
 
 sipStopBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  sipFormStatus.textContent = 'বন্ধ করা হচ্ছে…';
+  sipFormStatus.textContent = 'กำลังหยุด…';
   try {
     await postSip('/api/sip/stop');
-    sipFormStatus.textContent = 'বন্ধ হয়েছে।';
+    sipFormStatus.textContent = 'หยุดแล้ว';
   } catch (err) {
-    sipFormStatus.textContent = `বন্ধ ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `หยุดไม่สำเร็จ: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
 });
@@ -581,12 +567,12 @@ sipTestBtn.addEventListener('click', async (e) => {
 });
 
 savePromptSipBtn.addEventListener('click', async () => {
-  promptStatusEl.textContent = 'SIP-এ সেভ হচ্ছে…';
+  promptStatusEl.textContent = 'กำลังบันทึกไปยัง SIP…';
   try {
     await postSip('/api/sip/config', { instructions: getSystemPrompt() });
-    promptStatusEl.textContent = 'SIP প্রম্পট সেভ হয়েছে।';
+    promptStatusEl.textContent = 'บันทึก prompt ของ SIP แล้ว';
   } catch (err) {
-    promptStatusEl.textContent = `সেভ ব্যর্থ: ${err.message}`;
+    promptStatusEl.textContent = `บันทึกไม่สำเร็จ: ${err.message}`;
   }
   setTimeout(() => { promptStatusEl.textContent = ''; }, 3000);
 });

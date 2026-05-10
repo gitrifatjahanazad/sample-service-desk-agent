@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="bn">
+<html lang="th">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>বাংলা সার্ভিস ডেস্ক</title>
+    <title>ERP Help Desk ภาษาไทย</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main>
       <header>
-        <h1>বাংলা সার্ভিস ডেস্ক</h1>
-        <p class="sub">কথা বলুন বাংলায়, উত্তর শুনুন বাংলায়।</p>
+        <h1>ERP Help Desk ภาษาไทย</h1>
+        <p class="sub">พูดภาษาไทย ฟังคำตอบเป็นภาษาไทย — ผู้ช่วยสำหรับระบบ ERP</p>
       </header>
 
       <section class="controls">
-        <button id="connectBtn" class="primary">সংযোগ করুন</button>
+        <button id="connectBtn" class="primary">เชื่อมต่อ</button>
         <label class="mode">
           <input type="checkbox" id="vadToggle" checked />
-          স্বয়ংক্রিয় শোনা (VAD)
+          ฟังอัตโนมัติ (VAD)
         </label>
-        <button id="talkBtn" class="ptt" disabled>চেপে ধরে কথা বলুন</button>
+        <button id="talkBtn" class="ptt" disabled>กดค้างเพื่อพูด</button>
       </section>
 
       <details class="prompt-box" open>
-        <summary>সিস্টেম প্রম্পট (System prompt)</summary>
+        <summary>System prompt (คำสั่งระบบ)</summary>
         <textarea id="systemPrompt" rows="6" spellcheck="false"></textarea>
         <div class="prompt-actions">
-          <button id="applyPromptBtn" class="secondary">প্রয়োগ করুন</button>
-          <button id="resetPromptBtn" class="secondary">ডিফল্ট</button>
-          <button id="savePromptSipBtn" class="secondary">SIP-এ সেভ করুন</button>
+          <button id="applyPromptBtn" class="secondary">นำไปใช้</button>
+          <button id="resetPromptBtn" class="secondary">ค่าเริ่มต้น</button>
+          <button id="savePromptSipBtn" class="secondary">บันทึกไปยัง SIP</button>
           <span id="promptStatus" class="prompt-status"></span>
         </div>
       </details>
 
       <details class="prompt-box sip-box">
-        <summary>📞 কল কনফিগ (SIP Account)</summary>
-        <p id="sipStatus" class="sip-status">লোড হচ্ছে…</p>
+        <summary>📞 ตั้งค่าโทรศัพท์ (SIP Account)</summary>
+        <p id="sipStatus" class="sip-status">กำลังโหลด…</p>
         <form id="sipForm" class="sip-grid" autocomplete="off">
           <label>Account Name<input name="accountName" type="text" /></label>
           <label>SIP Server<input name="sipServer" type="text" placeholder="pabx.example.com:5060" /></label>
@@ -84,12 +84,12 @@
           <span id="sipFormStatus" class="prompt-status"></span>
         </div>
         <div class="sip-log-box">
-          <strong>কল লগ</strong>
+          <strong>บันทึกการโทร</strong>
           <ul id="sipLog" class="sip-log"></ul>
         </div>
       </details>
 
-      <p id="status" class="status">অপেক্ষমান…</p>
+      <p id="status" class="status">กำลังรอ…</p>
 
       <section id="log" class="log" aria-live="polite"></section>
 
