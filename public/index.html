@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="bn">
+<html lang="ne">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>বাংলা সার্ভিস ডেস্ক</title>
+    <title>नेपाली ERP सहायता डेस्क</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main>
       <header>
-        <h1>বাংলা সার্ভিস ডেস্ক</h1>
-        <p class="sub">কথা বলুন বাংলায়, উত্তর শুনুন বাংলায়।</p>
+        <h1>नेपाली ERP सहायता डेस्क</h1>
+        <p class="sub">नेपालीमा कुरा गर्नुहोस्, ERP सम्बन्धी जवाफ नेपालीमै सुन्नुहोस्।</p>
       </header>
 
       <section class="controls">
-        <button id="connectBtn" class="primary">সংযোগ করুন</button>
+        <button id="connectBtn" class="primary">जडान गर्नुहोस्</button>
         <label class="mode">
           <input type="checkbox" id="vadToggle" checked />
-          স্বয়ংক্রিয় শোনা (VAD)
+          स्वचालित सुन्ने (VAD)
         </label>
-        <button id="talkBtn" class="ptt" disabled>চেপে ধরে কথা বলুন</button>
+        <button id="talkBtn" class="ptt" disabled>थिचेर बोल्नुहोस्</button>
       </section>
 
       <details class="prompt-box" open>
-        <summary>সিস্টেম প্রম্পট (System prompt)</summary>
+        <summary>प्रणाली प्रम्प्ट (System prompt)</summary>
         <textarea id="systemPrompt" rows="6" spellcheck="false"></textarea>
         <div class="prompt-actions">
-          <button id="applyPromptBtn" class="secondary">প্রয়োগ করুন</button>
-          <button id="resetPromptBtn" class="secondary">ডিফল্ট</button>
-          <button id="savePromptSipBtn" class="secondary">SIP-এ সেভ করুন</button>
+          <button id="applyPromptBtn" class="secondary">लागू गर्नुहोस्</button>
+          <button id="resetPromptBtn" class="secondary">पूर्वनिर्धारित</button>
+          <button id="savePromptSipBtn" class="secondary">SIP मा सुरक्षित गर्नुहोस्</button>
           <span id="promptStatus" class="prompt-status"></span>
         </div>
       </details>
 
       <details class="prompt-box sip-box">
-        <summary>📞 কল কনফিগ (SIP Account)</summary>
-        <p id="sipStatus" class="sip-status">লোড হচ্ছে…</p>
+        <summary>📞 कल कन्फिग (SIP Account)</summary>
+        <p id="sipStatus" class="sip-status">लोड हुँदै…</p>
         <form id="sipForm" class="sip-grid" autocomplete="off">
           <label>Account Name<input name="accountName" type="text" /></label>
           <label>SIP Server<input name="sipServer" type="text" placeholder="pabx.example.com:5060" /></label>
@@ -84,12 +84,12 @@
           <span id="sipFormStatus" class="prompt-status"></span>
         </div>
         <div class="sip-log-box">
-          <strong>কল লগ</strong>
+          <strong>कल लग</strong>
           <ul id="sipLog" class="sip-log"></ul>
         </div>
       </details>
 
-      <p id="status" class="status">অপেক্ষমান…</p>
+      <p id="status" class="status">प्रतीक्षामा…</p>
 
       <section id="log" class="log" aria-live="polite"></section>
 

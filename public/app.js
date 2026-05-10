@@ -1,73 +1,73 @@
 const MODEL = 'gpt-realtime-1.5';
 
 const DEFAULT_SYSTEM_PROMPT = `
-আপনি Robi (রবি) মোবাইল অপারেটরের একজন ভদ্র, সাহায্যকারী এবং পেশাদার বাংলাভাষী কাস্টমার সার্ভিস এজেন্ট। আপনি শুধুমাত্র প্রাকৃতিক বাংলাদেশি বাংলা (বাংলাদেশি অ্যাকসেন্ট ও শব্দচয়ন) ব্যবহার করে কথা বলবেন।
+तपाईं एक विनम्र, सहयोगी, र पेशेवर नेपालीभाषी ERP (Enterprise Resource Planning) सहायता एजेन्ट हुनुहुन्छ। तपाईं केवल प्राकृतिक नेपाली भाषा (नेपाली उच्चारण र शब्दचयन) मात्र प्रयोग गर्नुहुन्छ।
 
-ভূমিকা:
+भूमिका:
 
-* গ্রাহকদের রবি সংক্রান্ত সেবা যেমন কল রেট, ইন্টারনেট ও মিনিট প্যাকেজ, রিচার্জ, বান্ডেল অফার, MNP, রোমিং, বিল পেমেন্ট, FnF, USSD কোড, কাস্টমার কেয়ার ইত্যাদি বিষয়ে সাহায্য করুন।
-* আপনি শুধু রবি সংক্রান্ত বিষয়ে সাহায্য করেন। অন্য বিষয়ে প্রশ্ন এলে ভদ্রভাবে গ্রাহককে রবি সম্পর্কিত প্রশ্নে ফিরিয়ে আনুন।
+* प्रयोगकर्तालाई ERP प्रणालीसँग सम्बन्धित विषयहरू जस्तै लेखा (Accounting/Finance), बिक्री (Sales), खरिद (Purchase), इन्भेन्टरी (Inventory), मानव संसाधन (HR/Payroll), उत्पादन (Manufacturing), CRM, इन्भ्वाइस, भ्याट/कर, रिपोर्ट, प्रयोगकर्ता पहुँच, अनुमति, र मोड्युल कन्फिगरेसन सम्बन्धी समस्यामा सहयोग गर्नुहोस्।
+* तपाईं केवल ERP सम्बन्धी विषयमा सहयोग गर्नुहुन्छ। अन्य विषयको प्रश्न आए विनम्रतापूर्वक प्रयोगकर्तालाई ERP सम्बन्धी प्रश्नमा फर्काउनुहोस्।
 
-ভাষা ও অ্যাকসেন্ট:
+भाषा र उच्चारण:
 
-* সর্বদা শুধুমাত্র বাংলায় উত্তর দিন।
-* প্রাকৃতিক ঢাকাইয়া/আধুনিক বাংলাদেশি কথ্য বাংলা ব্যবহার করুন।
-* কলকাতা বা পশ্চিমবঙ্গের বাংলা শব্দচয়ন, টোন বা উচ্চারণ ব্যবহার করবেন না।
-* “নমস্কার”, “কেমন আছো”, “বেশ”, “দেখাচ্ছি” ধরনের কলকাতাকেন্দ্রিক প্রকাশ এড়িয়ে চলুন।
-* প্রয়োজনে ব্যবহার করুন:
+* सधैँ नेपाली भाषामा मात्र उत्तर दिनुहोस्।
+* प्राकृतिक, आधुनिक नेपाली बोलीचाली प्रयोग गर्नुहोस्।
+* अत्यन्त साहित्यिक वा कठिन संस्कृतनिष्ठ शब्द प्रयोग नगर्नुहोस्।
+* आवश्यक परे प्रयोग गर्नुहोस्:
 
-  * “আসসালামু আলাইকুম”
-  * “কেমন আছেন”
-  * “ঠিক আছে”
-  * “সমস্যা নাই”
-  * “এইটা/ওইটা”
-* ভাষা হবে সহজ, পরিষ্কার, বন্ধুসুলভ এবং বাস্তব বাংলাদেশি কাস্টমার কেয়ারের মতো।
-* অতিরিক্ত সাহিত্যিক বা নাটকীয় বাংলা ব্যবহার করবেন না।
+  * “नमस्ते”
+  * “तपाईंलाई कसरी सहयोग गर्न सक्छु?”
+  * “हुन्छ”
+  * “ठीक छ”
+  * “समस्या छैन”
+* भाषा सरल, स्पष्ट, मित्रवत्, र वास्तविक नेपाली कस्टमर सपोर्टजस्तै हुनुपर्छ।
 
-উত্তরের ধরন:
+उत्तरको शैली:
 
-* সংক্ষিপ্ত, পরিষ্কার এবং সহজভাবে উত্তর দিন।
-* প্রয়োজনে গ্রাহকের সমস্যা বুঝতে প্রশ্ন করুন।
-* নিশ্চিত না হলে অনুমান করবেন না।
-* প্রয়োজন হলে গ্রাহককে রবি কাস্টমার কেয়ার ১২১ নম্বরে কল করতে অথবা [রবি অফিসিয়াল ওয়েবসাইট](https://www.robi.com.bd?utm_source=chatgpt.com) ভিজিট করতে বলুন।
+* संक्षिप्त, स्पष्ट र सहज रूपमा उत्तर दिनुहोस्।
+* आवश्यक भए प्रयोगकर्ताको समस्या बुझ्न प्रश्न सोध्नुहोस्।
+* निश्चित नभएमा अनुमान नगर्नुहोस्।
+* आवश्यक भएमा प्रयोगकर्तालाई आफ्नो ERP प्रशासक वा संस्थाको IT/सहायता टोलीलाई सम्पर्क गर्न अनुरोध गर्नुहोस्।
 
-ব্যক্তিত্ব ও স্বর:
+व्यक्तित्व र स्वर:
 
-* ভদ্র, ধৈর্যশীল, উষ্ণ এবং আত্মবিশ্বাসী কাস্টমার সার্ভিস এজেন্টের মতো কথা বলুন।
-* গ্রাহক বিরক্ত বা হতাশ হলে সহানুভূতিশীল স্বর ব্যবহার করুন।
-* ভালো অফার বা সুবিধার তথ্য দিলে স্বরে ইতিবাচক উৎসাহ রাখুন।
+* विनम्र, धैर्यशील, न्यानो, र आत्मविश्वासी सहायता एजेन्टजस्तै बोल्नुहोस्।
+* प्रयोगकर्ता निराश वा अप्ठेरोमा परेको लागे सहानुभूतिपूर्ण स्वर प्रयोग गर्नुहोस्।
+* समाधान वा सही प्रक्रिया बताउँदा स्वरमा सकारात्मक आत्मविश्वास राख्नुहोस्।
 
-গতি ও বিরতি:
+गति र विराम:
 
-* মাঝারি গতিতে কথা বলুন।
-* গুরুত্বপূর্ণ তথ্য—টাকার পরিমাণ, প্যাকেজের দাম, USSD কোড, ফোন নম্বর, মেয়াদ—ধীরে ও স্পষ্ট করে বলুন।
-* প্রতিটি গুরুত্বপূর্ণ ধাপ বা বাক্যের মাঝে সামান্য বিরতি রাখুন যেন গ্রাহক সহজে বুঝতে পারেন।
+* मध्यम गतिमा बोल्नुहोस्।
+* महत्त्वपूर्ण जानकारी—रकम, मिति, इन्भ्वाइस नम्बर, मोड्युलको नाम, मेनु पथ (menu path), बटनको नाम—विस्तारै र स्पष्ट रूपमा बोल्नुहोस्।
+* प्रत्येक महत्त्वपूर्ण चरण वा वाक्यबीच सानो विराम राख्नुहोस् ताकि प्रयोगकर्ताले सजिलै बुझ्न सकून्।
 
-উচ্চারণ:
+उच्चारण:
 
-* শুদ্ধ প্রমিত বাংলাদেশি বাংলা উচ্চারণ ব্যবহার করুন।
-* English brand name ও technical term বাংলা টোনে উচ্চারণ করুন:
+* शुद्ध मानक नेपाली उच्चारण प्रयोग गर्नुहोस्।
+* English module र technical term नेपाली उच्चारणमा बोल्नुहोस्:
 
-  * “Robi” → “রবি”
-  * “Internet” → “ইন্টারনেট”
-  * “Package” → “প্যাকেজ”
-  * “Recharge” → “রিচার্জ”
-* সংক্ষিপ্ত রূপ স্পষ্টভাবে একটি একটি অক্ষর করে বলুন:
+  * “Invoice” → “इन्भ्वाइस”
+  * “Inventory” → “इन्भेन्टरी”
+  * “Purchase Order” → “पर्चेज अर्डर”
+  * “Sales Order” → “सेल्स अर्डर”
+  * “Ledger” → “लेजर”
+* संक्षिप्त रूप स्पष्ट गरी एक एक अक्षर भनेर बोल्नुहोस्:
 
-  * “FnF” → “এফ অ্যান্ড এফ”
-  * “MNP” → “এম এন পি”
-  * “USSD” → “ইউ এস এস ডি”
-  * “MB” → “এম বি”
-  * “GB” → “জি বি”
+  * “ERP” → “ई आर पी”
+  * “HR” → “एच आर”
+  * “VAT” → “भ्याट”
+  * “GL” → “जी एल”
+  * “PO” → “पी ओ”
+  * “SO” → “एस ओ”
 
-জোর (Emphasis):
+जोड (Emphasis):
 
-* টাকার পরিমাণ, প্যাকেজের নাম, USSD কোড, ফোন নম্বর এবং মেয়াদ—এই অংশগুলোতে কণ্ঠে অতিরিক্ত স্পষ্টতা ও জোর দিন।
+* रकम, मिति, इन्भ्वाइस वा अर्डर नम्बर, मोड्युलको नाम, र मेनु पथ—यी अंशहरूमा स्वरमा थप स्पष्टता र जोड दिनुहोस्।
 
-অতিরিক্ত নির্দেশনা:
+अतिरिक्त निर्देशन:
 
-* Slight English mixing স্বাভাবিকভাবে ব্যবহার করা যেতে পারে, তবে মূল ভাষা অবশ্যই বাংলা হবে।
-* সবসময় এমনভাবে কথা বলুন যেন একজন বাস্তব বাংলাদেশি রবি কাস্টমার কেয়ার প্রতিনিধি গ্রাহকের সাথে ফোনে কথা বলছে।
+* Slight English mixing प्राकृतिक रूपमा प्रयोग गर्न सकिन्छ, तर मूल भाषा अनिवार्य रूपमा नेपाली नै हुनुपर्छ।
+* सधैँ यसरी बोल्नुहोस् मानौँ एक वास्तविक नेपाली ERP सहायता प्रतिनिधि प्रयोगकर्तासँग फोनमा कुरा गरिरहेको छ।
 `;
 
 function buildSessionConfig(instructions) {
@@ -81,8 +81,8 @@ function buildSessionConfig(instructions) {
         noise_reduction: { type: 'far_field' },
         transcription: {
           model: 'gpt-4o-mini-transcribe',
-          language: 'bn',
-          prompt: 'বাংলা ভাষায় কথোপকথন। Robi (রবি) মোবাইল অপারেটর সম্পর্কিত শব্দ যেমন রিচার্জ, ইন্টারনেট প্যাকেজ, MB, GB, MNP, FnF, USSD, কাস্টমার কেয়ার (১২১) থাকতে পারে।',
+          language: 'ne',
+          prompt: 'नेपाली भाषामा कुराकानी। ERP सम्बन्धित शब्दहरू जस्तै लेखा, बिक्री, खरिद, इन्भेन्टरी, HR, पेरोल, मोड्युल, इन्भ्वाइस, भ्याट, रिपोर्ट, पर्चेज अर्डर, सेल्स अर्डर हुन सक्छन्।',
         },
         turn_detection: {
           type: 'server_vad',
@@ -190,14 +190,14 @@ async function fetchEphemeralKey() {
 }
 
 async function connect() {
-  setStatus('সংযোগ হচ্ছে…');
+  setStatus('जडान हुँदै…');
   connectBtn.disabled = true;
 
   let ephemeralKey;
   try {
     ephemeralKey = await fetchEphemeralKey();
   } catch (err) {
-    setStatus(`টোকেন আনতে ব্যর্থ: ${err.message}`, true);
+    setStatus(`टोकन ल्याउन असफल: ${err.message}`, true);
     connectBtn.disabled = false;
     return;
   }
@@ -210,14 +210,14 @@ async function connect() {
 
   pc.onconnectionstatechange = () => {
     if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
-      setStatus(`সংযোগ ${pc.connectionState}`, true);
+      setStatus(`जडान ${pc.connectionState}`, true);
     }
   };
 
   try {
     micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch (err) {
-    setStatus('মাইক্রোফোন অ্যাক্সেস দেওয়া হয়নি।', true);
+    setStatus('माइक्रोफोन पहुँच दिइएको छैन।', true);
     cleanup();
     return;
   }
@@ -229,7 +229,7 @@ async function connect() {
   dc = pc.createDataChannel('oai-events');
   dc.onopen = () => {
     sendEvent(buildSessionUpdate(vadToggle.checked));
-    setStatus(vadToggle.checked ? 'শুনছি…' : 'কথা বলার জন্য বাটন চেপে ধরুন');
+    setStatus(vadToggle.checked ? 'सुन्दैछु…' : 'बोल्नका लागि बटन थिच्नुहोस्');
   };
   dc.onmessage = (e) => {
     try {
@@ -262,7 +262,7 @@ async function connect() {
   await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 
   connected = true;
-  connectBtn.textContent = 'সংযোগ বন্ধ করুন';
+  connectBtn.textContent = 'जडान बन्द गर्नुहोस्';
   connectBtn.disabled = false;
   talkBtn.disabled = vadToggle.checked;
   setMicEnabled(vadToggle.checked);
@@ -288,7 +288,7 @@ function cleanup() {
     micStream = null;
   }
   remoteAudio.srcObject = null;
-  connectBtn.textContent = 'সংযোগ করুন';
+  connectBtn.textContent = 'जडान गर्नुहोस्';
   connectBtn.disabled = false;
   talkBtn.disabled = true;
   talkBtn.classList.remove('active');
@@ -296,18 +296,18 @@ function cleanup() {
 
 function disconnect() {
   cleanup();
-  setStatus('সংযোগ বন্ধ।');
+  setStatus('जडान बन्द गरियो।');
 }
 
 function handleEvent(ev) {
   switch (ev.type) {
     case 'input_audio_buffer.speech_started':
       pendingUserBubble = addBubble('user', '…', true);
-      setStatus('শুনছি…');
+      setStatus('सुन्दैछु…');
       break;
 
     case 'input_audio_buffer.speech_stopped':
-      setStatus('উত্তর দিচ্ছি…');
+      setStatus('जवाफ दिँदैछु…');
       break;
 
     case 'conversation.item.input_audio_transcription.delta': {
@@ -344,11 +344,11 @@ function handleEvent(ev) {
     }
 
     case 'response.done':
-      setStatus(vadToggle.checked ? 'শুনছি…' : 'কথা বলার জন্য বাটন চেপে ধরুন');
+      setStatus(vadToggle.checked ? 'सुन्दैछु…' : 'बोल्नका लागि बटन थिच्नुहोस्');
       break;
 
     case 'error':
-      setStatus(`ত্রুটি: ${ev.error?.message || JSON.stringify(ev.error)}`, true);
+      setStatus(`त्रुटि: ${ev.error?.message || JSON.stringify(ev.error)}`, true);
       break;
   }
 }
@@ -363,14 +363,14 @@ vadToggle.addEventListener('change', () => {
   sendEvent(buildSessionUpdate(vadToggle.checked));
   talkBtn.disabled = vadToggle.checked;
   setMicEnabled(vadToggle.checked);
-  setStatus(vadToggle.checked ? 'শুনছি…' : 'কথা বলার জন্য বাটন চেপে ধরুন');
+  setStatus(vadToggle.checked ? 'सुन्दैछु…' : 'बोल्नका लागि बटन थिच्नुहोस्');
 });
 
 function startTalk() {
   if (!connected || vadToggle.checked) return;
   talkBtn.classList.add('active');
   setMicEnabled(true);
-  setStatus('শুনছি…');
+  setStatus('सुन्दैछु…');
 }
 
 function stopTalk() {
@@ -380,7 +380,7 @@ function stopTalk() {
   setMicEnabled(false);
   sendEvent({ type: 'input_audio_buffer.commit' });
   sendEvent({ type: 'response.create' });
-  setStatus('উত্তর দিচ্ছি…');
+  setStatus('जवाफ दिँदैछु…');
 }
 
 talkBtn.addEventListener('mousedown', startTalk);
@@ -392,16 +392,16 @@ talkBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopTalk(); })
 applyPromptBtn.addEventListener('click', () => {
   if (connected) {
     sendEvent(buildSessionUpdate(vadToggle.checked));
-    promptStatusEl.textContent = 'প্রম্পট প্রয়োগ করা হয়েছে।';
+    promptStatusEl.textContent = 'प्रम्प्ट लागू गरियो।';
   } else {
-    promptStatusEl.textContent = 'সংযোগ করার সময় এই প্রম্পট ব্যবহার হবে।';
+    promptStatusEl.textContent = 'जडान गर्दा यो प्रम्प्ट प्रयोग हुनेछ।';
   }
   setTimeout(() => { promptStatusEl.textContent = ''; }, 2500);
 });
 
 resetPromptBtn.addEventListener('click', () => {
   promptEl.value = DEFAULT_SYSTEM_PROMPT;
-  promptStatusEl.textContent = 'ডিফল্ট প্রম্পট লোড হয়েছে।';
+  promptStatusEl.textContent = 'पूर्वनिर्धारित प्रम्प्ट लोड गरियो।';
   setTimeout(() => { promptStatusEl.textContent = ''; }, 2500);
 });
 
@@ -439,7 +439,7 @@ async function loadSipConfig() {
     if (!res.ok) throw new Error(json.error || 'Failed');
     applyConfigToForm(json.config);
   } catch (err) {
-    sipFormStatus.textContent = `লোড ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `लोड असफल: ${err.message}`;
   }
 }
 
@@ -467,28 +467,28 @@ function appendSipLog(text, level = 'info') {
 const sipBubbles = { user: null, bot: null };
 
 const SIP_STATUS_LABELS = {
-  stopped: 'বন্ধ',
-  starting: 'চালু হচ্ছে…',
-  registered: 'রেজিস্টার্ড',
-  in_call: 'কলে আছে',
-  error: 'ত্রুটি',
+  stopped: 'बन्द',
+  starting: 'सुरु हुँदै…',
+  registered: 'दर्ता भएको',
+  in_call: 'कलमा',
+  error: 'त्रुटि',
 };
 
 function handleSipStatus(ev) {
   const label = SIP_STATUS_LABELS[ev.state] || ev.state;
-  sipStatusEl.textContent = `স্ট্যাটাস: ${label} — ${ev.message}`;
+  sipStatusEl.textContent = `स्थिति: ${label} — ${ev.message}`;
   sipStatusEl.classList.toggle('error', ev.state === 'error');
 }
 
 function handleSipCall(ev) {
   if (ev.state === 'ringing') {
-    appendSipLog(`📞 রিং: ${ev.from}`, 'info');
+    appendSipLog(`📞 रिङ: ${ev.from}`, 'info');
   } else if (ev.state === 'connected') {
-    appendSipLog(`✅ সংযুক্ত: ${ev.from}`, 'info');
+    appendSipLog(`✅ जडान भयो: ${ev.from}`, 'info');
     sipBubbles.user = null;
     sipBubbles.bot = null;
   } else if (ev.state === 'ended') {
-    appendSipLog(`📴 শেষ (${ev.reason}, ${ev.duration ?? 0}s)`, 'info');
+    appendSipLog(`📴 समाप्त (${ev.reason}, ${ev.duration ?? 0}s)`, 'info');
     sipBubbles.user = null;
     sipBubbles.bot = null;
   }
@@ -527,39 +527,39 @@ function startSseStream() {
 
 sipSaveBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  sipFormStatus.textContent = 'সেভ হচ্ছে…';
+  sipFormStatus.textContent = 'सुरक्षित गर्दै…';
   try {
     const data = readForm();
     const json = await postSip('/api/sip/config', data);
     applyConfigToForm(json.config);
-    sipFormStatus.textContent = 'সেভ হয়েছে।';
+    sipFormStatus.textContent = 'सुरक्षित गरियो।';
   } catch (err) {
-    sipFormStatus.textContent = `সেভ ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `सुरक्षित असफल: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
 });
 
 sipStartBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  sipFormStatus.textContent = 'চালু করা হচ্ছে…';
+  sipFormStatus.textContent = 'सुरु गर्दै…';
   try {
     const data = readForm();
     await postSip('/api/sip/config', { ...data, enabled: true });
-    sipFormStatus.textContent = 'চালু করা হয়েছে।';
+    sipFormStatus.textContent = 'सुरु भयो।';
   } catch (err) {
-    sipFormStatus.textContent = `চালু ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `सुरु असफल: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
 });
 
 sipStopBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  sipFormStatus.textContent = 'বন্ধ করা হচ্ছে…';
+  sipFormStatus.textContent = 'बन्द गर्दै…';
   try {
     await postSip('/api/sip/stop');
-    sipFormStatus.textContent = 'বন্ধ হয়েছে।';
+    sipFormStatus.textContent = 'बन्द भयो।';
   } catch (err) {
-    sipFormStatus.textContent = `বন্ধ ব্যর্থ: ${err.message}`;
+    sipFormStatus.textContent = `बन्द असफल: ${err.message}`;
   }
   setTimeout(() => { sipFormStatus.textContent = ''; }, 3000);
 });
@@ -581,12 +581,12 @@ sipTestBtn.addEventListener('click', async (e) => {
 });
 
 savePromptSipBtn.addEventListener('click', async () => {
-  promptStatusEl.textContent = 'SIP-এ সেভ হচ্ছে…';
+  promptStatusEl.textContent = 'SIP मा सुरक्षित गर्दै…';
   try {
     await postSip('/api/sip/config', { instructions: getSystemPrompt() });
-    promptStatusEl.textContent = 'SIP প্রম্পট সেভ হয়েছে।';
+    promptStatusEl.textContent = 'SIP प्रम्प्ट सुरक्षित गरियो।';
   } catch (err) {
-    promptStatusEl.textContent = `সেভ ব্যর্থ: ${err.message}`;
+    promptStatusEl.textContent = `सुरक्षित असफल: ${err.message}`;
   }
   setTimeout(() => { promptStatusEl.textContent = ''; }, 3000);
 });
