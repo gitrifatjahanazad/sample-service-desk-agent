@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helpdesk-service
+  namespace: clickspikes
+  labels:
+    app: helpdesk-app
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: helpdesk-app

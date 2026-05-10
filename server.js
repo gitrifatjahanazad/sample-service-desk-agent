@@ -14,6 +14,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const MODEL = 'gpt-realtime-1.5';
 
+const startedAt = Date.now();
+
+app.get('/healthz', (_req, res) => {
+  const sip = getSipStatus();
+  const healthy = !sip.enabled || sip.registered;
+  res.status(healthy ? 200 : 503).json({
+    status: healthy ? 'ok' : 'degraded',
+    uptimeSeconds: Math.floor((Date.now() - startedAt) / 1000),
+    timestamp: new Date().toISOString(),
+    openaiKey: Boolean(process.env.OPENAI_API_KEY),
+    sip,
+  });
+});
+
 app.post('/api/session', async (_req, res) => {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {

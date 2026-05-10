@@ -1,0 +1,65 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Dependencies (let the image install fresh)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / secrets — must NOT be baked into the image
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+sip-config.json
+
+# Docker files themselves
+Dockerfile
+Dockerfile.*
+docker-compose*.yml
+.dockerignore
+
+# Editor / IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs / runtime artifacts
+logs
+*.log
+.cache
+.tmp
+tmp
+coverage
+.nyc_output
+
+# Recordings & generated audio
+recordings
+*.wav
+*.mp3
+
+# Docs / repo metadata not needed at runtime
+README.md
+*.md
+LICENSE
+
+# Build outputs (regenerated in image)
+dist
+build
+
+# Misc
+*.bak
+*.orig
