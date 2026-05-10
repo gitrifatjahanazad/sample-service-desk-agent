@@ -18,8 +18,29 @@ spec:
   template:
     metadata:
       labels:
-        app: helpdesk-app   
+        app: helpdesk-app
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+        - name: seed-sip-config
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              if [ ! -f /data/sip-config.json ]; then
+                cp /seed/sip-config.json /data/sip-config.json
+                echo "seeded /data/sip-config.json from ConfigMap"
+              else
+                echo "/data/sip-config.json already present, skipping seed"
+              fi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: sip-config-seed
+              mountPath: /seed
+              readOnly: true
       containers:
         - name: helpdesk-app
           image: us-central1-docker.pkg.dev/applied-abbey-356818/clickspikes/helpdesk:latest
@@ -31,6 +52,9 @@ spec:
             - name: sip
               containerPort: 5070
               protocol: UDP
+          env:
+            - name: SIP_PUBLIC_ADDRESS
+              value: "34.10.145.57"
           envFrom:
             - secretRef:
                 name: helpdesk-app-secret
@@ -64,4 +88,7 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
+        - name: sip-config-seed
+          configMap:
+            name: helpdesk-sip-config-seed
       terminationGracePeriodSeconds: 30

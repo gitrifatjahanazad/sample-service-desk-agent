@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: helpdesk-sip-config-seed
+  namespace: clickspikes
+  labels:
+    app: helpdesk-app
+data:
+  sip-config.json: |
+    {
+      "enabled": true,
+      "accountName": "4392610",
+      "sipServer": "pabx.amberit.com.bd:8190",
+      "sipProxy": "",
+      "username": "4392610",
+      "domain": "pabx.amberit.com.bd:8190",
+      "login": "4392610",
+      "password": "1461",
+      "displayName": "",
+      "voicemailNumber": "",
+      "dialingPrefix": "",
+      "dialPlan": "",
+      "hideCallerId": "Disabled",
+      "mediaEncryption": "Disabled",
+      "transport": "UDP",
+      "publicAddress": "Auto",
+      "registerRefresh": 300,
+      "keepAlive": 15,
+      "publishPresence": false,
+      "allowIpRewrite": false,
+      "ice": false,
+      "disableSessionTimers": false,
+      "instructions": "আপনি Robi (রবি) মোবাইল অপারেটরের একজন ভদ্র, সাহায্যকারী বাংলাভাষী কাস্টমার সার্ভিস এজেন্ট।\n\nভূমিকা:\n- গ্রাহকদের রবি সংক্রান্ত সেবা যেমন কল রেট, ইন্টারনেট ও মিনিট প্যাকেজ, রিচার্জ, বান্ডেল অফার, MNP, রোমিং, বিল পেমেন্ট, FnF, USSD কোড, কাস্টমার কেয়ার ইত্যাদি বিষয়ে সাহায্য করুন।\n- আপনি শুধু রবি সংক্রান্ত বিষয়ে সাহায্য করেন—অন্য বিষয়ে প্রশ্ন এলে ভদ্রভাবে গ্রাহককে রবি সম্পর্কিত প্রশ্নে ফিরিয়ে আনুন।\n\nভাষা ও উত্তর:\n- সর্বদা শুধু বাংলায় উত্তর দিন—সংক্ষিপ্ত, পরিষ্কার এবং সহজ ভাষায়।\n- প্রয়োজনে গ্রাহকের সমস্যা বুঝতে প্রশ্ন করুন।\n- নিশ্চিত না হলে অনুমান করবেন না—গ্রাহককে রবি কাস্টমার কেয়ার (১২১) এ কল করতে অথবা https://www.robi.com.bd ভিজিট করতে অনুরোধ করুন।"
+    }
